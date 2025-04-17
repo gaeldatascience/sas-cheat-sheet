@@ -10,6 +10,7 @@ PROC IMPORT DATAFILE='chemin_du_fichier.csv' /* Chemin du fichier à importer */
     /* DELIMITER=',' */
     /* GUESSINGROWS=MAX; */
 RUN;
+```
 ### **``PROC EXPORT``**
 **Exporte des tables SAS vers des fichiers externes comme CSV ou Excel.**
 ```sas
@@ -18,6 +19,7 @@ PROC EXPORT DATA=nom_table /* Table SAS à exporter */
     DBMS=CSV /* Type de fichier */
     REPLACE; /* Remplace le fichier s'il existe déjà */
 RUN;
+```
 ### **``ODS`` (Output Delivery System)**
 **Exporte des tables SAS dans plusieurs formats (option `title`).**
 ```sas
@@ -37,6 +39,7 @@ PROC SORT DATA=nom_table OUT=table_triee; /* Table triée en sortie */
     /* OUT=table_triee NODUPKEY; : Supprime les doublons en fonction des colonnes listées. */
     /* NODUP : Tous les doublons indépendemment des colonnes listées. */
 RUN;
+```
 ## **2. Procédures pour les statistiques descriptives**
 ### **``PROC MEANS``**
 **Fournit des statistiques descriptives comme la moyenne, la médiane, et les écart-types.**
@@ -68,6 +71,7 @@ PROC MEANS DATA=nom_table NOPRINT;
         P99=
         / AUTONAME;
 RUN;
+```
 PROC PRINT data=stats_table; run;
 **Différences entre ``PROC MEANS`` et ``PROC UNIVARIATE`` :**
 ``PROC MEANS`` est rapide et centré sur les statistiques descriptives classiques comme la moyenne, la médiane, le minimum et l’écart-type, avec un support direct des regroupements via CLASS, mais ne propose ni tests de normalité, ni moments (asymétrie, kurtosis) ou graphiques.
@@ -93,6 +97,7 @@ PROC UNIVARIATE DATA=nom_table NOPRINT;
         PCTLPTS=10 25 50 75 90 
         PCTLPRE=Pctl_;
 RUN;
+```
 **Version orientée graphique :**
 ```sas
 PROC UNIVARIATE DATA=nom_table;
@@ -112,6 +117,7 @@ PROC FREQ DATA=nom_table;
     /* LIST : Affiche les fréquences sous forme de liste. */
     /* NOPERCENT NOROW NOCOL NOFREQ */
 RUN;
+```
 ## **3. Exploration des données**
 ### **``PROC PRINT``**
 **Affiche les observations d'une table SAS.**
@@ -120,6 +126,7 @@ PROC PRINT DATA=nom_table (OBS=10); /* Limite à 10 observations */
    /* LABEL; : Affiche les étiquettes des colonnes au lieu des noms. */
    /* VAR colonne1 colonne2; : Sélectionne les colonnes à afficher. */
 RUN;
+```
 ### **``PROC CONTENTS``**
 **Affiche des informations sur les tables, comme les noms de variables, types et formats.**
 ```sas
@@ -127,6 +134,7 @@ PROC CONTENTS DATA=nom_table;
    /* VARNUM; : Affiche les variables dans l'ordre où elles ont été créées. */
    /* SHORT; : Affiche un résumé compact des métadonnées. */
 RUN;
+```
 ## **4. Procédures pour l'analyse avancée**
 ### **``PROC REG``**
 **Réalise des régressions linéaires simples et multiples.**
@@ -136,6 +144,7 @@ PROC REG DATA=nom_table;
     /* PLOT; : Affiche les résidus et diagnostics de régression. */
     /* SELECTION=STEPWISE; : Utilise une sélection pas à pas des variables. */
 RUN;
+```
 QUIT;
 ### **``PROC CORR``**
 **Calcule les coefficients de corrélation entre variables numériques.**
@@ -145,6 +154,7 @@ PROC CORR DATA=nom_table;
     /* PEARSON; : Calcule les corrélations de Pearson. */
     /* SPEARMAN; : Calcule les corrélations de Spearman. */
 RUN;
+```
 ## **5. Rappel de la structure de la ``PROC SQL``**
 ```sas
 PROC SQL outobs=N; /* Limite le nombre de lignes affichées dans la sortie */
@@ -161,6 +171,7 @@ CREATE TABLE nom_table AS
     ORDER BY /* colonnes pour trier les résultats (ASC par défaut, DESC)*/
 ;
 QUIT;
+```
 ## **6. Hechek ``Étape DATA``**
 **Créer une table avec des données directement dans SAS**
 ```sas
@@ -173,6 +184,7 @@ Table 5 120.99
 Canapé 2 450.75
 ;
 RUN;
+```
 **Manipulations de base**
 ```sas
 DATA manipulations;
@@ -185,6 +197,7 @@ DATA manipulations;
     IF MISSING(quantite) THEN statut = "Manquant";
     ELSE statut = "Non manquant";
 RUN;
+```
 **Conditions avec ``IF-THEN-ELSE``**
 ``IF-THEN-ELSE`` : Plus flexible, adapté aux conditions complexes.
 ```sas
@@ -194,6 +207,7 @@ DATA ventes_categorisees;
     ELSE IF prix_unitaire > 100 THEN categorie = "Moyen de gamme";
     ELSE categorie = "Entrée de gamme";
 RUN;
+```
 **Conditions avec ``SELECT-WHEN-OTHERWISE``**
 ``SELECT-WHEN-OTHERWISE`` : Plus lisible, idéal quand les conditions sont mutuellement exclusives.
 ```sas
@@ -205,6 +219,7 @@ DATA ventes_categorisees;
         OTHERWISE categorie = "Entrée de gamme";
     END;
 RUN;
+```
 **Exemple pour l'exercice 7 de l'examen SAS Avancé 2023-2024**
 ```sas
 data in.table_output_1 in.table_output_2;
@@ -242,6 +257,7 @@ DATA ventes_analyse;
     /* Conserver uniquement les variables nécessaires */
     KEEP produit quantite prix_unitaire cumul_ventes max_vente indicateur_debut;
 RUN;
+```
 **Extraction de lignes spécifiques avec ``RETAIN`` et un *FLAG*.**
 ```sas
 DATA lignes_extraites;
@@ -260,6 +276,7 @@ DATA lignes_extraites;
     /* Conserver uniquement la variable 'ligne' */
     KEEP ligne;
 RUN;
+```
 **Jointures**
 ```sas
 /* Jointures regroupées */
@@ -277,6 +294,7 @@ DATA table_sortie;
     /* Full Join (toutes les observations des deux tables, aucune condition) */
     OUTPUT full_join;
 RUN;
+```
 
 /* Concaténation verticale */
 DATA concat_vertical;
@@ -289,6 +307,7 @@ PROC SQL;
     SELECT COUNT(*) INTO :nb_lignes /* Stocke le nombre d'observations dans la macro-variable nb_lignes */
     FROM table;
 QUIT;
+```
 
 %PUT Le nombre de lignes est : &nb_lignes; /* Affiche la valeur de la macro-variable */
 **Créer un chemin d'accès avec une Macro**
@@ -298,6 +317,7 @@ QUIT;
 DATA mydata;
     SET "&chemin.table.sas7bdat"; /* Utilisation du chemin défini */
 RUN;
+```
 
 %PUT Le chemin défini est : &chemin; /* Affiche le chemin dans le log */
 **Définir une Macro avec Paramètres**
@@ -306,6 +326,7 @@ RUN;
     PROC PRINT DATA=&dataset;
         WHERE &variable &condition; /* Applique un filtre avec une condition dynamique */
     RUN;
+```
 %MEND;
 
 /* Appeler la macro */
@@ -316,6 +337,7 @@ PROC MEANS DATA=dataset NOPRINT;
     VAR score; /* Variable pour laquelle on calcule les quartiles */
     OUTPUT OUT=quartiles PCTLPTS=25 50 75 PCTLPRE=Q_;
 RUN;
+```
 
 DATA _NULL_;
     SET quartiles;
@@ -473,3 +495,4 @@ PROC RANK DATA=input_table OUT=output_table GROUPS=4;
     VAR score; /* Variable à classer */
     RANKS quartile_score; /* Nouvelle variable avec le quartile */
 RUN;
+```
