@@ -71,8 +71,8 @@ PROC MEANS DATA=nom_table NOPRINT;
         P99=
         / AUTONAME;
 RUN;
-```
 PROC PRINT data=stats_table; run;
+```
 **Différences entre ``PROC MEANS`` et ``PROC UNIVARIATE`` :**
 ``PROC MEANS`` est rapide et centré sur les statistiques descriptives classiques comme la moyenne, la médiane, le minimum et l’écart-type, avec un support direct des regroupements via CLASS, mais ne propose ni tests de normalité, ni moments (asymétrie, kurtosis) ou graphiques.
 ``PROC UNIVARIATE`` est plus complet, offrant des tests de normalité, moments, percentiles personnalisés et graphiques (histogrammes, probplots), mais il est plus lent pour de grands volumes et nécessite BY avec tri préalable pour les regroupements.
@@ -294,12 +294,11 @@ DATA table_sortie;
     /* Full Join (toutes les observations des deux tables, aucune condition) */
     OUTPUT full_join;
 RUN;
-```
-
 /* Concaténation verticale */
 DATA concat_vertical;
     SET table1 table2; /* Empile les observations de table1 et table2 */
 RUN;
+```
 ## **7. Macros**
 **Créer des Macro-Variables à partir de ``PROC SQL``**
 ```sas
@@ -307,9 +306,8 @@ PROC SQL;
     SELECT COUNT(*) INTO :nb_lignes /* Stocke le nombre d'observations dans la macro-variable nb_lignes */
     FROM table;
 QUIT;
-```
-
 %PUT Le nombre de lignes est : &nb_lignes; /* Affiche la valeur de la macro-variable */
+```
 **Créer un chemin d'accès avec une Macro**
 ```sas
 %LET chemin= C:\Users\MonUtilisateur\SAS\Data\;
@@ -317,27 +315,26 @@ QUIT;
 DATA mydata;
     SET "&chemin.table.sas7bdat"; /* Utilisation du chemin défini */
 RUN;
-```
-
 %PUT Le chemin défini est : &chemin; /* Affiche le chemin dans le log */
+```
 **Définir une Macro avec Paramètres**
 ```sas
 %MACRO filtre_macro(dataset, variable, condition=);
     PROC PRINT DATA=&dataset;
         WHERE &variable &condition; /* Applique un filtre avec une condition dynamique */
     RUN;
-```
 %MEND;
 
 /* Appeler la macro */
 %filtre_macro(dataset=table, variable=age, condition=>30);
+```
+
 **Exemple de création de quartiles avec ``PROC MEANS``, stockage dans des Macro-Variables puis utilisation dans une heheck ``Etape DATA``.**
 ```sas
 PROC MEANS DATA=dataset NOPRINT;
     VAR score; /* Variable pour laquelle on calcule les quartiles */
     OUTPUT OUT=quartiles PCTLPTS=25 50 75 PCTLPRE=Q_;
 RUN;
-```
 
 DATA _NULL_;
     SET quartiles;
@@ -355,6 +352,7 @@ DATA class_quartiles;
     ELSE IF score < &q3 THEN categorie = 'Moyen-Haut';
     ELSE categorie = 'Haut';
 RUN;
+```
 **Macro qui boucle à partir d'une liste de macro-variables (examen 2023-2024)**
 ```sas
 %macro suppression_librefs;
@@ -383,6 +381,7 @@ RUN;
 %mend suppression_librefs;
 
 %suppression_librefs;
+```
 ## **8. FONCTIONS UTILES**
 **Modification de variables**
 ```sas
@@ -410,6 +409,7 @@ CATX(' ', var1, var2);
 
 /* CATS : Concatène des valeurs en supprimant les espaces inutiles */
 trimmed_concatenation = CATS(var1, var2);
+```
 **Calculs à partir de variables**
 ```sas
 /* AVG : Calcule la moyenne des valeurs numériques */
@@ -463,6 +463,7 @@ put(num_var, 8.); /* percent8.2 transforme 0.8456 en 84.56% */
 
 /* INPUT = Caractère vers numérique */
 input(char_var, 8.);
+```
 ### **``PROC FORMAT``**
 **Mapping de valeurs (jobTitle) à des catégories (CSP) via un format personnalisé, puis ajoute ces catégories à une nouvelle colonne dans une table.**
 ```sas
